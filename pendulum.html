@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<title>Hardcode</title>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<style>
+ body {
+  background: black;
+ }
+ canvas {
+    display: block;
+    margin: auto;
+}
+</style>
+<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+<script>
+        var mIteration,canvas,l1,drawer;
+
+        var v = 0; //velocity
+        var t = 0; // time
+        var L = 80; // pendulum length
+        var g = 10; // gravity
+        var m = 10; // mass
+        var T = 2 * Math.PI * Math.sqrt(L/g); // period
+        var k = g / m;
+        var radian = Math.PI / 180;
+        var theta0 = 50 * radian ; // amplitude
+        
+        function theta(theta0,t)
+        {
+            return theta0 * Math.cos(Math.sqrt(g / L) * t);
+            
+            //return theta0 * Math.pow(Math.E,t)
+        }
+
+        function draw() {
+            
+            t = t + 0.01;
+
+            var theta1 = theta(theta0,-k*T*t/2);
+            theta0 *= 0.999;
+            
+            var scX = canvas.width * 0.5;
+            var scY = canvas.height * 0.5;
+            var xO = L * Math.sin(theta1);
+            var yO = L * Math.cos(theta1);
+            
+
+            var psX = scX + xO;
+            var psY = scY + yO;
+            
+            l1.clearRect(0, 0, innerWidth, innerHeight);
+            l1.fillStyle = "red";
+            l1.strokeStyle = "#FF00ff";
+            l1.beginPath();
+            l1.moveTo(scX, scY);
+            l1.lineTo(psX, psY);
+            l1.stroke(); 
+            l1.beginPath();
+            l1.arc(psX, psY, m, 0, 2 * Math.PI);
+            l1.stroke(); 
+            l1.fill();            
+        }
+
+
+    function init() {
+        
+        clearInterval(drawer);
+        $("#mCanvas").remove();
+        $(
+        '<canvas id="mCanvas" width="640" height="480" style="">'
+        ).appendTo($("body"));
+
+        mIteration = 0;
+        canvas = document.getElementById('mCanvas');
+        l1 = canvas.getContext('2d');
+                
+        l1.font = "bold 80px Arial";
+        l1.textAlign = 'center';
+        l1.textBaseline = 'middle';
+        l1.fillStyle = "#000000";
+        l1.shadowOffsetX = 0;
+        l1.shadowOffsetY = 0;
+        l1.shadowColor = "#101010AA";
+        l1.shadowBlur = 4;
+        
+        drawer=setInterval(draw, 10);
+    }
+/* --------------------------------- */
+
+
+window.onclick = function (e) {
+  //clearInterval(drawer);
+  //$("#c").remove();
+};
+
+window.onload = init;
+window.onresize = init;
+</script>
+</head>
+<body>
+</body>
+</html>
+

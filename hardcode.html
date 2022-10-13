@@ -15,8 +15,9 @@
 </style>
 <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
 <script>
-        var mIteration,canvas,l1,radian,drawer;
-
+        var mIteration,canvas,l1,drawer;
+        var radian = Math.PI / 180;
+        
         function draw() {
             degree = radian * (mIteration % 360);
             mIteration = mIteration + 1;
@@ -85,8 +86,7 @@
         mIteration = 0;
         canvas = document.getElementById('mCanvas');
         l1 = canvas.getContext('2d');
-        radian = Math.PI / 180;
-
+        
         l1.font = "bold 80px Arial";
         l1.textAlign = 'center';
         l1.textBaseline = 'middle';
