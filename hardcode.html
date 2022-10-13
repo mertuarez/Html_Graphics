@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<title>Hardcode</title>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<style>
+ body {
+  background: black;
+ }
+ canvas {
+    display: block;
+    margin: auto;
+}
+</style>
+<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+<script>
+        var mIteration,canvas,l1,radian,drawer;
+
+        function draw() {
+            degree = radian * (mIteration % 360);
+            mIteration = mIteration + 1;
+
+            l1.clearRect(0, 0, innerWidth, innerHeight);
+            var scX = canvas.width * 0.5;
+            var scY = canvas.height * 0.5;
+            var xO = 200 * Math.sin(degree);
+            var yO = 0;
+            if ((mIteration / 360) % 3 >= 2)
+            {
+                var yO = 200 * Math.tan(4 * degree);
+            } else if ((mIteration / 360) % 3 >= 1)
+            {
+                var yO = 200 * Math.sin(Math.PI * Math.sin(degree))
+            }
+
+            var psX = scX + xO;
+            var psY = scY + yO;
+
+            l1.shadowColor = "#00000000";
+            // Create gradient
+            var grd = l1.createRadialGradient(psX, psY, 0, psX, psY, 200);
+            grd.addColorStop(0.3, "#fafafaFF");
+            grd.addColorStop(0.4, "#161616FF");
+            grd.addColorStop(0.5, "#08080811");
+            grd.addColorStop(0.6, "#a0a0a000");
+
+            var grd2 = l1.createRadialGradient(psX, psY, 0, psX, psY, 200);
+            grd2.addColorStop(0.3, "#fafafa11");
+            grd2.addColorStop(0.4, "#16161611");
+            grd2.addColorStop(0.5, "#08080800");
+            grd2.addColorStop(0.6, "#a0a0a000");
+            //rgba(240,240,240,1) 70px, rgba(21,21,21,1) 120px,rgba(8,8,0,1) 150px,rgba(0,0,0,0) 500px
+
+            // Fill with gradient
+            l1.fillStyle = grd;
+            l1.fillRect(0, 0, innerWidth, innerHeight);
+
+            var grd3 = l1.createRadialGradient(psX, psY, 0, psX, psY, 200);
+            grd3.addColorStop(0.1, "#f0f0f0ff");
+            grd3.addColorStop(0.4, "#000000aa");
+            grd3.addColorStop(0.4, "#0a0a0a00");
+
+            l1.fillStyle = grd3;
+            l1.shadowColor = "#101010A0";
+            //l1.fillStyle = "#101010";
+            l1.shadowOffsetX = -xO * 0.1;
+            l1.shadowOffsetY = -yO * 0.1;
+            l1.fillText("HARDCODE", scX, scY);
+
+            //l1.fillStyle = grd2;
+            //l1.fillRect(0, 0, innerWidth, innerHeight);
+
+        }
+
+
+    function init() {
+        
+        clearInterval(drawer);
+        $("#mCanvas").remove();
+        $(
+        '<canvas id="mCanvas" width="640" height="480" style="">'
+        ).appendTo($("body"));
+
+        mIteration = 0;
+        canvas = document.getElementById('mCanvas');
+        l1 = canvas.getContext('2d');
+        radian = Math.PI / 180;
+
+        l1.font = "bold 80px Arial";
+        l1.textAlign = 'center';
+        l1.textBaseline = 'middle';
+        l1.fillStyle = "#000000";
+        l1.shadowOffsetX = 0;
+        l1.shadowOffsetY = 0;
+        l1.shadowColor = "#101010AA";
+        l1.shadowBlur = 4;
+        
+        drawer=setInterval(draw, 10);
+    }
+/* --------------------------------- */
+
+
+window.onclick = function (e) {
+  //clearInterval(drawer);
+  //$("#c").remove();
+};
+
+window.onload = init;
+window.onresize = init;
+</script>
+</head>
+<body>
+</body>
+</html>
+
