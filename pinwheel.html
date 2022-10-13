@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<title>Pinwheel</title>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<style>
+ body {
+  background: black;
+ }
+ canvas {
+    display: block;
+    margin: auto;
+}
+</style>
+<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+<script>
+    var canvas,ctx,x,y;
+
+    var t = 0; // time
+    var pi = 2 * Math.PI;
+    
+    var dbg1 = 1;
+    var dbg2 = 1;
+    var dbg3 = 1;
+    
+    function spiral(x,y,a,b,sa,st,en)
+    {
+        var x0,y0,angle;
+        
+        ctx.moveTo(x0, y0);
+        for (i = st; i < en; i+=1) {
+            
+            angle = (0.5*Math.PI)/(390) * i + sa;
+            x0 = x + a*Math.sin(angle*2) * i * 0.2;
+            y0 = y + b*Math.cos(angle*2) * i * 0.2;
+            if (i===st) ctx.moveTo(x0, y0);
+            ctx.lineTo(x0, y0);
+        }
+        
+    }
+    
+    function draw() {
+        t = (t%1) + 0.003;
+        
+        //mask
+        ctx.beginPath();
+        ctx.globalCompositeOperation = 'source-over';
+        ctx.rect(0, 0, innerWidth, innerHeight);
+        ctx.fillStyle = 'black';
+        ctx.fill();
+        ctx.closePath();
+        
+        ctx.beginPath();
+        ctx.globalCompositeOperation = 'destination-out';
+        ctx.arc(x,y,195,0,pi);
+        ctx.fillStyle = 'green';
+        ctx.fill();
+        ctx.closePath();
+        
+        ctx.beginPath();
+        ctx.globalCompositeOperation = 'source-over';
+        ctx.arc(x,y,95,0,pi);
+        ctx.fillStyle = 'black';
+        ctx.fill();
+        ctx.closePath();
+                
+        //spirals
+        ctx.beginPath();
+        ctx.globalCompositeOperation = "source-atop";
+        for(var i = 0; i< 1 ; i+=0.05)
+        {
+            spiral(x, y, -1, -1, pi*i + pi*t, 960, 2000);
+        }
+        ctx.stroke();
+        ctx.closePath();
+        
+        ctx.globalCompositeOperation = "source-atop";        
+        ctx.beginPath();
+        for(var i = 0; i< 1 ; i+=0.05)
+        {
+                spiral(x, y, 1, 1, pi*i + pi*t - 0.05, 10, 500);
+        }
+        ctx.stroke();
+        ctx.closePath();
+
+        ctx.globalCompositeOperation = "destination-over";
+        ctx.beginPath();
+        for(var i = 0; i< 1 ; i+=0.05)
+        {
+                spiral(x, y, 1, -1, pi*i - pi*t , 420, 1000);
+        }
+        ctx.stroke();
+        ctx.fill();
+        ctx.closePath();
+        
+    }
+
+    function draw2() {
+        for(var i = 0; i<1; i++)
+        {
+            draw();
+        }
+        requestAnimationFrame(draw2);
+    }
+
+
+    function init() {
+      
+      $("#mCanvas").remove();
+      $(
+        '<canvas id="mCanvas" width="420" height="340" style="">'
+      ).appendTo($("body"));
+  
+      canvas = document.getElementById('mCanvas');
+      ctx = canvas.getContext('2d', { alpha: true });
+      ctx.strokeStyle = "#ffffff";
+      ctx.fillStyle = "#000000";
+      ctx.lineWidth = 6;
+      ctx.globalCompositeOperation="source-over";
+      ctx.filter = 'none';
+      ctx.clearRect(0, 0, innerWidth, innerHeight);
+      ctx.globalAlpha = 1;
+      
+      x = canvas.width * 0.5;
+      y = canvas.height * 0.5;
+
+        
+      requestAnimationFrame(draw2);
+    }
+/* --------------------------------- */
+
+
+window.onclick = function (e) {
+  //clearInterval(drawer);
+  //$("#c").remove();
+};
+
+window.onload = init;
+window.onresize = init;
+</script>
+</head>
+<body>
+</body>
+</html>
+

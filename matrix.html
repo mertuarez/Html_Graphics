@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<title>Matrix</title>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<style>
+ body {
+  background: black;
+ }
+</style>
+<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+<script>
+/* fork of: https://codepen.io/t3h2mas/pen/EKYOWO/
+ */
+var drawer, c, ctx, speed, rainColor, mtrx2, test,font_size,drops;
+
+function draw() {
+  //Black BG for the canvas
+  //translucent BG to show trail
+  ctx.fillStyle = "rgba(0, 0, 0, 0.05)";
+  ctx.fillRect(0, 0, c.width, c.height);
+
+  ctx.fillStyle = rainColor; //green text
+  ctx.font = font_size + "px arial";
+  //looping over drops
+  for (var i = 0; i < c.width; i = i + font_size) {
+    // send to get rand character
+    test = mtrx2[Math.floor(Math.random() * mtrx2.length)];
+
+    ctx.fillText(test, i, drops[i]);
+
+    if (Math.random() > 0.277)
+      drops[i] = ((drops[i] || 0) + font_size) % c.height;
+  }
+}
+
+function init() {
+  speed = 40;
+  rainColor = "#50FF50";
+  mtrx2 = "0123456789".split("");
+  font_size = 10;
+  drops = [];
+  
+  clearInterval(drawer);
+  $("#c").remove();
+  $(
+    '<canvas id="c" style="position:fixed;top:0;left:0;z-index:9999999">'
+  ).appendTo($("body"));
+  c = document.getElementById("c");
+  c.height = window.innerHeight;
+  c.width = window.innerWidth;
+  ctx = c.getContext("2d");
+  ctx.clearRect(0, 0, c.innerWidth, c.innerHeight);
+
+  drawer = setInterval(draw, speed);
+}
+/* --------------------------------- */
+
+
+window.onclick = function (e) {
+  clearInterval(drawer);
+  $("#c").remove();
+};
+
+/*
+jQuery.jPlayer && (jQuery.jPlayer.focus.options.keyBindings.muted.key = 0);
+var keys = [1, 2, 3, 4, 5, 6];
+$(window).keypress(function (e) {
+  keys.shift();
+  keys.push(e.key);
+  if (keys.join("").toLowerCase() == "matrix") {
+    init();
+  }
+});
+*/
+
+window.onload = init;
+window.onresize = init;
+</script>
+</head>
+<body>
+<p>
+<a href="javascript:init()">Knock knock neo...</a>
+</p>
+</body>
+</html>
+
